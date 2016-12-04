@@ -63,7 +63,10 @@ jwt = JWT(app, authenticate, identity)
 #because microcontrollers are bad ad json deserializing with pretty print output
 @jwt.auth_response_handler
 def custom_auth_response_handler(access_token, identity):
-    return json.dumps({'jwt': {'token': access_token.decode('utf-8')}}), 200, {'Content-Type': 'application/json'}
+    logging.info(identity)
+    result = {'jwt': {'token': access_token.decode('utf-8')}}
+    logging.info(result)
+    return json.dumps(result), 200, {'Content-Type': 'application/json'}
 
 def openweathermap():
     if not hasattr(g, 'openweathermap'):
@@ -88,6 +91,7 @@ def calculateLedBarStatus(ref_time, start_time, duration):
 def getGeoDetails():
     ip = request.remote_addr
     details = Freegeoip.getDetails(ip)
+    logging.info(details)
     #g.timezone = details["time_zone"]
     #g.city = details["city"]
     #g.country_code = details["country_code"]
