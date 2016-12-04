@@ -19,8 +19,9 @@ with open('config.yml', 'r') as f:
     doc = yaml.load(f)
     openweathermap_appid  = doc['openweathermap']['appid']
     weatherlight_duration = doc['weatherlight']['duration']
+    default_username = doc['security']['username']
     default_password = doc['security']['password']
-    
+
 class User(object):
     def __init__(self, id, username, password):
         self.id = id
@@ -31,7 +32,7 @@ class User(object):
         return "User(id='%s')" % self.id
 
 users = [
-    User(1, 'vanschoote.sander@gmail.com', default_password),
+    User(1, default_username, default_password),
 ]
 
 username_table = {u.username: u for u in users}
