@@ -14,14 +14,17 @@ from freegeoip import Freegeoip
 import yaml
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
+import base64
 
 with open('config.yml', 'r') as f:
     doc = yaml.load(f)
     openweathermap_appid  = doc['openweathermap']['appid']
     weatherlight_duration = doc['weatherlight']['duration']
     weatherlight_max_wait = doc['weatherlight']['max_wait_poll']
-    default_username = doc['security']['username']
-    default_password = doc['security']['password']
+    default_username = doc['security']['default']['username']
+    default_password = doc['security']['default']['password']
+    secret_key = base64.b64decode(doc['security']['jwt']['secret_key'])
+    expiration = doc['security']['jwt']['expiration']
 
 class User(object):
     def __init__(self, id, username, password):
@@ -52,9 +55,9 @@ app = Flask(__name__)
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
 app.debug = True
-app.config['SECRET_KEY'] = 'OVDOS9ZL2ZURYZU580NKN7PIJ29K0FM0BUKIATS9AXD1KWO6CM43AFC5LR5OAS21'
+app.config['SECRET_KEY'] = secret_key
 app.config['JWT_AUTH_URL_RULE'] = '/v1/token'
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=30)
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=expiration)
 app.config['JWT_AUTH_USERNAME_KEY'] = 'username'
 app.config['JWT_AUTH_PASSWORD_KEY'] = 'password'
 
