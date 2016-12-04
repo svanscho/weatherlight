@@ -1,0 +1,12 @@
+openweathermap:
+  appid: "572649f9f438a1524b78aaac70219815"
+weatherlight:
+  duration: 4
+  max_wait_poll: 3
+security:
+  default:
+    username: "vanschoote.sander@gmail.com"
+    password: "sander123"
+  jwt:
+    secret_key: "JDEkOExYS0hycXAkTjNrdGhYMEFPNWlKZm15dHZ6b2pYMA=="
+    expiration: 30
