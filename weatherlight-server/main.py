@@ -19,6 +19,7 @@ with open('config.yml', 'r') as f:
     doc = yaml.load(f)
     openweathermap_appid  = doc['openweathermap']['appid']
     weatherlight_duration = doc['weatherlight']['duration']
+    weatherlight_max_wait = doc['weatherlight']['max_wait_poll']
     default_username = doc['security']['username']
     default_password = doc['security']['password']
 
@@ -73,11 +74,14 @@ def calculateLedBarStatus(ref_time, start_time, duration):
     stop_time  = start_time + timedelta(hours=duration)
     enabled    = (start_time < ref_time and ref_time < stop_time)
     next_event = stop_time if enabled else start_time
-    wait_poll = (next_event - ref_time).seconds 
-    # the end device might not have a very accurate clock/timer so we are 
-    # making it fetch updated information somewhat before the actual next
-    # event, but only if it's still far enough away (~5min)
-    wait_poll = wait_poll-300 if wait_poll>300 else wait_poll
+    wait_poll = (next_event - ref_time).seconds
+    if wait_poll > timedelta(hours=weatherlight_max_wait).seconds:
+        wait_poll = timedelta(hours=weatherlight_max_wait).seconds
+    else:
+        # the end device might not have a very accurate clock/timer so we are 
+        # making it fetch updated information somewhat before the actual next
+        # event, but only if it's still far enough away (~5min)
+        wait_poll = wait_poll-300 if wait_poll>300 else wait_poll
     return enabled, wait_poll
 
 @app.before_request
