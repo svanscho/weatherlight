@@ -30,7 +30,7 @@ class User(object):
         self.password = password
 
     def __str__(self):
-        return "User(id='%s', username='%s', password='%s')" % self.id, self.username, self.password
+        return "User(id='%s', username='%s', password='%s')" % (self.id, self.username, self.password)
 
 users = [
     User(1, default_username, default_password),
