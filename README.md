@@ -7,6 +7,8 @@ Led strip indicating the weather of the next day with colors.
 
 It has been written with Arduino and ESP8266 in mind, but it should be quite portable so you can use this code in any other C++ project.
 
+![Image of the weatherlight in action](https://github.com/svanscho/weatherlight/blob/master/images/2015-11-27%2011.00.51.jpg?raw=true)
+
 Works on
 --------
 
@@ -51,6 +53,7 @@ const char* loginPass = "<your password>";
 That's it. Enjoy!
 
 Found this project useful? Please star this project or [help me back with a donation!](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=P3RDCSF7FN5FW&lc=BE&item_name=Weatherlight&item_number=weatherlight&currency_code=AUD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted) :smile:
+
 
 
 
