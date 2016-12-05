@@ -57,7 +57,7 @@ app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = secret_key
 app.config['JWT_AUTH_URL_RULE'] = '/v1/token'
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=expiration)
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=expiration)
 app.config['JWT_AUTH_USERNAME_KEY'] = 'username'
 app.config['JWT_AUTH_PASSWORD_KEY'] = 'password'
 

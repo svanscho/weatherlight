@@ -47,6 +47,7 @@ static int tempMax = 0;        //default to 0, in case when there is e.g. no dat
 static unsigned long lastConnectionTime = 0;      // last time you connected to the server, in milliseconds
 const unsigned long DEFAULT_POLL_WAIT_TIME = 5 * 60 * 1000L;  //default is 5 minutes
 static unsigned long pollWaitTime = DEFAULT_POLL_WAIT_TIME; //for storing the current value of the poll wait time interval
+static bool force_update = false;
 
 
 void setup() {
@@ -61,7 +62,8 @@ void setup() {
 void loop()  
 { 
   // if <requestInterval> seconds have passed since your last connection, then connect again and send data:
-  if (millis() - lastConnectionTime > pollWaitTime) {
+  if (millis() - lastConnectionTime > pollWaitTime || force_update) {
+    force_update = false;
     getWeatherData();
   }
   if(ledEnabled){
@@ -275,7 +277,7 @@ void getJWToken() {
     received = true;
     String line = client.readStringUntil('\n');
     Serial.println(line);
-    if (line.equals("HTTP/1.1 401 Unauthorized")) {
+    if (line.startsWith("HTTP/1.1 401 Unauthorized")) {
       authorized = false;
       Serial.println("----------Login Failed----------");
       return;
@@ -313,6 +315,7 @@ void getJWToken() {
 
 void getWeatherData() {
   boolean received = false;
+  pollWaitTime = DEFAULT_POLL_WAIT_TIME; //in case something goes wrong, this will trigger a retry after DEFAULT_POLL_WAIT_TIME
   String path = "/v1/data";
   StaticJsonBuffer<400> jsonBuffer; //used to store server response
   
@@ -341,8 +344,9 @@ void getWeatherData() {
   while (client.available()) {
     String line = client.readStringUntil('\n');
     Serial.println(line);
-    if (line.equals("HTTP/1.1 401 Unauthorized")) {
+    if (line.startsWith("HTTP/1.1 401 Unauthorized")) {
       authorized = false;
+      force_update = true;
     }
     if (line.length() == 1) { //empty line means end of headers
       break;
@@ -381,7 +385,6 @@ void getWeatherData() {
       Serial.println("----------Weather Data Updated----------");
     } else {
       Serial.println("----------Weather Data Failed----------");
-      pollWaitTime = DEFAULT_POLL_WAIT_TIME;
       return;
     }
     if(received){
