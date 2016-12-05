@@ -5,9 +5,10 @@ Weatherlight
 
 Led strip indicating the weather of the next day with colors.
 
+<img style="float: right;"  src="https://github.com/svanscho/weatherlight/blob/master/images/2015-11-27%2011.00.51.jpg?raw=true" width="300" />
+
 It has been written with Arduino and ESP8266 in mind, but it should be quite portable so you can use this code in any other C++ project.
 
-<img style="float: right;"  src="https://github.com/svanscho/weatherlight/blob/master/images/2015-11-27%2011.00.51.jpg?raw=true" width="300" />
 
 Works on
 --------
